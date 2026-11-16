@@ -5,6 +5,7 @@ import type { AppData, PrimaryColor } from '~/types/app-data'
 import { MAX_IMPORT_FILE_BYTES } from '~/types/app-data'
 import { createEmptyAppData, parseAppDataResult } from '~/utils/persistence/storage-schema'
 import { backupFilename, describeImportOutcome, extractImportedHabits, mergeHabitsForImport, serializeBackup } from '~/utils/persistence/backup'
+import { checkinsCsvFilename, serializeCheckinsCsv } from '~/utils/persistence/checkins-csv'
 import { buildCurrentHabitsPrompt, buildGettingStartedPrompt } from '~/utils/domain/ai-prompts'
 import { formatTimeString, parseTimeString, todayDateKey } from '~/utils/domain/date'
 import { safeJsonParse } from '~/utils/persistence/safe-json'
@@ -14,6 +15,7 @@ definePageMeta({ layout: 'app' })
 
 const settingsStore = useSettingsStore()
 const habitsStore = useHabitsStore()
+const entriesStore = useEntriesStore()
 
 const reminderEngine = useReminderEngine()
 const sync = useCrossTabSync()
@@ -155,6 +157,24 @@ function exportJson(): void {
   backupNudge.markExported()
 
   toast.add({ title: 'Export complete', color: 'success' })
+}
+
+const hasCheckins = computed(() => entriesStore.entries.length > 0)
+
+// Read-only CSV export of all check-ins for spreadsheets (issue #3). Not a backup,
+// so it does not reset the backup nudge.
+function exportCheckinsCsv(): void {
+  const csv = serializeCheckinsCsv(habitsStore.habits, entriesStore.entries)
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = checkinsCsvFilename(todayDateKey())
+  anchor.click()
+  URL.revokeObjectURL(url)
+
+  logSecurityEvent('data.export', 'info', `${entriesStore.entries.length} check-ins exported as CSV`)
+  toast.add({ title: 'CSV export complete', color: 'success' })
 }
 
 function pluralize(value: number, singular: string, plural = `${singular}s`): string {
@@ -595,6 +615,15 @@ async function loadDemoDataFromSettings(replaceExisting: boolean): Promise<void>
           <UButton
             color="neutral"
             variant="outline"
+            icon="i-lucide-file-spreadsheet"
+            :disabled="!hasCheckins"
+            @click="exportCheckinsCsv"
+          >
+            Export check-ins (CSV)
+          </UButton>
+          <UButton
+            color="neutral"
+            variant="outline"
             icon="i-lucide-upload"
             @click="importModalOpen = true"
           >
@@ -609,6 +638,12 @@ async function loadDemoDataFromSettings(replaceExisting: boolean): Promise<void>
             Delete all data
           </UButton>
         </div>
+        <p
+          v-if="!hasCheckins"
+          class="mt-3 text-xs text-muted"
+        >
+          No check-ins yet. The CSV export becomes available after your first check-in.
+        </p>
       </UCard>
 
       <PersistenceHealthPanel />

@@ -21,6 +21,10 @@ export class SettingsPage {
     return this.page.getByRole('button', { name: 'Export JSON' })
   }
 
+  exportCsvButton(): Locator {
+    return this.page.getByRole('button', { name: 'Export check-ins (CSV)' })
+  }
+
   openImportModal(): Promise<void> {
     return this.page.getByRole('button', { name: 'Import JSON' }).click()
   }
