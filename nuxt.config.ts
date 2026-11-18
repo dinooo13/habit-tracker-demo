@@ -9,6 +9,12 @@ const noindex = process.env.NUXT_PUBLIC_NOINDEX === 'true'
 // Gate dev-only tooling so it never ships in a production build (issue #1, SEC-10).
 // `nuxt build`/`generate` set NODE_ENV=production; `nuxt dev` leaves it unset/dev.
 const isDev = process.env.NODE_ENV !== 'production'
+// Vitest must not load the PWA client plugin: it imports the virtual module
+// `virtual:pwa-register/vue`, which vite-node cannot resolve on every platform
+// (Windows: "The argument 'filename' must be a file URL object ... Received
+// 'file:///@vite-plugin-pwa/virtual:pwa-register/vue'"). `usePwaUpdate` already
+// degrades to a no-op without `$pwa`.
+const isVitest = process.env.VITEST === 'true'
 
 export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@pinia/nuxt', '@vite-pwa/nuxt', '@nuxt/eslint'],
@@ -124,6 +130,7 @@ export default defineNuxtConfig({
     },
   },
   pwa: {
+    client: { registerPlugin: !isVitest, installPrompt: false, periodicSyncForUpdates: 0 },
     // SEC-14: download new service workers but wait for explicit user consent
     // (a reload banner in app/layouts/app.vue) before activating them, instead
     // of applying updates silently. See ADR-0008.
