@@ -42,6 +42,17 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 - Der eingebaute Fehler: `git diff origin/stufe/08-verify-browser origin/kurs/verify-rot -- app/`
 - Der Bericht: `git show origin/kurs/verify-rot:specs/kategorien.verification.md`
 
+## Musterlösung Übung 4: `seminar/ue4-code-parallel`
+
+Baut auf `stufe/03-code` auf und ändert nur die Skills. Im `spec`-Skill bekommt jeder
+Task eine Abhängigkeitsangabe, z. B. `3. (depends on 1) …`. Der `code`-Skill lässt
+unabhängige Tasks ohne gemeinsame Dateien parallel in Subagenten laufen, jeder Subagent
+arbeitet TDD (erst rot, dann grün) und committet nicht. Der Hauptagent prüft jedes Ergebnis
+und committet Task für Task selbst. Die Gates laufen am Ende einmal über alles. Bei
+Konflikten oder unklaren Abhängigkeiten wird nacheinander gearbeitet.
+
+- Der Diff: `git diff origin/stufe/03-code origin/seminar/ue4-code-parallel -- .claude/skills/`
+
 ## Weitere Branches
 
 Neben der Stufen-Kette gibt es weitere Branches im Repo. Ihr braucht sie für die Hausaufgabe nicht.

@@ -50,6 +50,20 @@ For each task in the spec, in order:
 
 Update the spec's task list as you go (`- [x]`) so a new session can resume.
 
+### Independent tasks in parallel
+
+Tasks without `(depends on …)` may run in parallel subagents (Agent tool), one
+task per subagent:
+
+- Only tasks with no dependency that touch no common file. If dependencies or
+  files are unclear, or two tasks would conflict, work them one after the other.
+- Each subagent gets the spec path and its one task, and works it red then green
+  as above. It shows you the failing test, then the passing one. It does not commit.
+- You orchestrate. Review each result (diff, the red and green test runs), then
+  commit task by task yourself, one commit per task.
+- Tasks that depend on others start after those are committed.
+- The gates in step 4 run once at the end, over everything.
+
 If a task turns out wrong or impossible, stop and tell the user. Do not change the
 scope on your own. Small details the spec left open are fine to decide; note them
 in the final report.
