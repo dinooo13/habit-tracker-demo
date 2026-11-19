@@ -37,6 +37,9 @@ export default defineConfig({
               // happy-dom is lighter than jsdom and sufficient for these
               // form/page tests; pin it so the DOM choice stays visible.
               domEnvironment: 'happy-dom',
+              // Service-worker registration is exercised by Playwright.
+              // Keep the PWA virtual client module out of the simulated DOM.
+              overrides: { pwa: { client: { registerPlugin: false } } },
             },
           },
         },

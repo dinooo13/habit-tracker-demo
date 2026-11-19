@@ -11,6 +11,7 @@ import {
   isDateInHabitPause,
   relativeDayLabel,
 } from '~/utils/domain/date'
+import { categoryFilterOptions, filterByCategory, HABIT_CATEGORY_META } from '~/utils/domain/categories'
 import * as stats from '~/utils/domain/stats'
 
 definePageMeta({ layout: 'app' })
@@ -20,6 +21,7 @@ const entriesStore = useEntriesStore()
 const settingsStore = useSettingsStore()
 const backupNudge = useBackupNudge()
 const habitActions = useHabitActions()
+const { categoryFilter } = useCategoryFilter()
 
 // Sourced from the central day clock so the whole day-scoped view (header,
 // calendar bounds, "Today" label) rolls over automatically at local midnight
@@ -121,11 +123,20 @@ const pausedHabitsForDate = computed(() =>
   habitsStore.activeHabits.filter(habit => isDateInHabitPause(habit, dateKey.value)),
 )
 
-const dueHabitModels = computed(() =>
+const allDueHabitModels = computed(() =>
   dueHabits.value.map(habit => ({
     habit,
     entry: entriesStore.entryByHabitAndDate(habit.id, dateKey.value),
   })),
+)
+
+// The category filter scopes the queue lists and progress counters; the streak
+// strip and the paused alert stay unfiltered.
+const dueHabitModels = computed(() =>
+  filterByCategory(
+    allDueHabitModels.value.map(model => ({ ...model, category: model.habit.category })),
+    categoryFilter.value,
+  ),
 )
 
 const doneCount = computed(
@@ -242,6 +253,12 @@ const openHabits = computed(() =>
   dueHabitModels.value
     .filter(model => !model.entry)
     .sort(compareByReminderThenName),
+)
+
+// Open habits hidden by the category filter, so the Open tab never claims that
+// everything is reviewed while other categories still have open habits.
+const openHabitsInOtherCategories = computed(() =>
+  allDueHabitModels.value.filter(model => !model.entry).length - openHabits.value.length,
 )
 
 const reviewedHabits = computed(() =>
@@ -496,23 +513,42 @@ function reopenHabit(habitId: string): void {
 
       <UCard>
         <template #header>
-          <div class="flex items-center gap-2">
-            <UIcon
-              name="i-lucide-list-todo"
-              class="size-5 text-muted"
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <UIcon
+                name="i-lucide-list-todo"
+                class="size-5 text-muted"
+              />
+              <h2 class="text-lg font-semibold">
+                {{ isToday ? "Today's habit queue" : 'Habit queue' }}
+              </h2>
+            </div>
+            <USelect
+              v-if="allDueHabitModels.length"
+              v-model="categoryFilter"
+              :items="categoryFilterOptions"
+              value-key="value"
+              aria-label="Filter by category"
+              data-testid="today-category-filter"
+              class="w-48"
             />
-            <h2 class="text-lg font-semibold">
-              {{ isToday ? "Today's habit queue" : 'Habit queue' }}
-            </h2>
           </div>
         </template>
 
         <UEmpty
-          v-if="!dueHabitModels.length"
+          v-if="!allDueHabitModels.length"
           icon="i-lucide-calendar-check-2"
           :title="isToday ? 'No habits due today' : 'No habits were due'"
           :description="isToday ? 'Create a habit or adjust schedule weekdays.' : 'Nothing was scheduled on this day.'"
           :actions="isToday ? [{ label: 'Create habit', to: '/app/habits/new', icon: 'i-lucide-plus' }] : []"
+        />
+
+        <UEmpty
+          v-else-if="!dueHabitModels.length && categoryFilter !== 'all'"
+          icon="i-lucide-list-filter"
+          :title="`No due habits in ${HABIT_CATEGORY_META[categoryFilter].label}`"
+          description="Try another category or show all due habits."
+          :actions="[{ label: 'Show all categories', icon: 'i-lucide-x', onClick: () => { categoryFilter = 'all' } }]"
         />
 
         <UTabs
@@ -555,6 +591,15 @@ function reopenHabit(habitId: string): void {
                       <p class="text-sm text-muted">
                         {{ model.habit.identityStatement }}
                       </p>
+                      <UBadge
+                        color="neutral"
+                        variant="outline"
+                        size="sm"
+                        :icon="HABIT_CATEGORY_META[model.habit.category].icon"
+                        data-testid="habit-category-badge"
+                      >
+                        {{ HABIT_CATEGORY_META[model.habit.category].label }}
+                      </UBadge>
                     </div>
                     <div class="flex shrink-0 flex-col items-end gap-1.5">
                       <UBadge
@@ -603,7 +648,18 @@ function reopenHabit(habitId: string): void {
           <template #open>
             <div class="mt-4 space-y-2">
               <UAlert
-                v-if="!openHabits.length"
+                v-if="!openHabits.length && categoryFilter !== 'all'"
+                color="neutral"
+                variant="subtle"
+                :title="`No open habits in ${HABIT_CATEGORY_META[categoryFilter].label}`"
+                :description="openHabitsInOtherCategories
+                  ? `${openHabitsInOtherCategories} open ${openHabitsInOtherCategories === 1 ? 'habit is' : 'habits are'} in other categories.`
+                  : 'Every due habit in this category has been reviewed.'"
+                :actions="[{ label: 'Show all categories', icon: 'i-lucide-x', color: 'neutral', variant: 'outline', onClick: () => { categoryFilter = 'all' } }]"
+                data-testid="today-open-filtered-empty"
+              />
+              <UAlert
+                v-else-if="!openHabits.length"
                 color="success"
                 variant="subtle"
                 title="No open habits"
@@ -631,6 +687,15 @@ function reopenHabit(habitId: string): void {
                       <p class="text-sm text-muted">
                         {{ model.habit.identityStatement }}
                       </p>
+                      <UBadge
+                        color="neutral"
+                        variant="outline"
+                        size="sm"
+                        :icon="HABIT_CATEGORY_META[model.habit.category].icon"
+                        data-testid="habit-category-badge"
+                      >
+                        {{ HABIT_CATEGORY_META[model.habit.category].label }}
+                      </UBadge>
                     </div>
                     <div class="flex shrink-0 flex-col items-end gap-1.5">
                       <UBadge

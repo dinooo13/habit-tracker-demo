@@ -28,6 +28,7 @@ Required fields for each habit:
 - reminderTime: "HH:mm" 24-hour string or null
 - startDate: "YYYY-MM-DD" (default to ${today} if I do not specify)
 - archived: boolean (default false)
+- category: one of "health" | "learning" | "work" | "other" (default "other")
 - pauses: array of { "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" } ranges when the habit is paused (default [])
 
 Constraints:
@@ -51,6 +52,7 @@ Output format:
       "reminderTime": "HH:mm or null",
       "startDate": "YYYY-MM-DD",
       "archived": false,
+      "category": "health|learning|work|other",
       "pauses": [{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }]
     }
   ]
@@ -73,6 +75,7 @@ export function buildCurrentHabitsPrompt(habits: Habit[]): string {
         reminderTime: habit.reminderTime,
         startDate: habit.startDate,
         archived: habit.archived,
+        category: habit.category,
         pauses: habit.pauses,
       })),
     },
@@ -104,6 +107,7 @@ Output format:
       "reminderTime": "HH:mm or null",
       "startDate": "YYYY-MM-DD",
       "archived": false,
+      "category": "health|learning|work|other",
       "pauses": [{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }]
     }
   ]

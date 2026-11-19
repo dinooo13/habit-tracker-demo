@@ -5,6 +5,10 @@ export type HabitStatus = 'done' | 'missed' | 'skipped'
 export const PRIMARY_COLOR_OPTIONS = ['sky', 'emerald', 'violet', 'rose', 'amber'] as const
 export type PrimaryColor = (typeof PRIMARY_COLOR_OPTIONS)[number]
 
+export const HABIT_CATEGORIES = ['health', 'learning', 'work', 'other'] as const
+export type HabitCategory = (typeof HABIT_CATEGORIES)[number]
+export const DEFAULT_HABIT_CATEGORY: HabitCategory = 'other'
+
 export const MISS_REASON_CODES = [
   'forgot',
   'no_time',
@@ -70,6 +74,7 @@ export interface Habit {
   startDate: string
   archived: boolean
   pauses: HabitPause[]
+  category: HabitCategory
   createdAt: string
   updatedAt: string
 }
@@ -118,7 +123,8 @@ export const BACKUP_NUDGE_SNOOZE_DAYS = 7
 /**
  * The current persisted envelope. The only shape change from V1 is the new
  * `pauses` field on `Habit`; see ADR-0010 and `migrateToV2` in
- * `app/utils/persistence/storage-schema.ts`.
+ * `app/utils/persistence/storage-schema.ts`. `Habit.category` was added later as an
+ * additive, defaulted field (missing/unknown -> 'other') without a version bump.
  */
 export interface AppDataV2 {
   schemaVersion: typeof APP_DATA_SCHEMA_VERSION
@@ -139,6 +145,7 @@ export interface HabitCreateInput {
   reminderTime: string | null
   startDate: string
   pauses?: HabitPause[]
+  category?: HabitCategory
 }
 
 export interface HabitUpdateInput extends HabitCreateInput {

@@ -21,6 +21,10 @@ The domain vocabulary used throughout the code, mostly borrowed from James Clear
   (`end >= start`) during which a habit is paused. Paused days are *never due*, so they
   generate no entry and are excluded from missed / streak / completion math and coaching
   (`isDateInHabitPause`; see [adr/0010](adr/0010-appdatav2-flexible-schedules-pause-ranges.md)).
+- **Category (`HabitCategory`)** — one fixed group per habit: `health`, `learning`, `work`, or
+  `other` (the default). Shown as a badge and used to filter the Habits list and the Today queue
+  (`?category=`); missing/unknown values load as `other` without a schema bump
+  (see [adr/0026](adr/0026-habit-category-additive-defaulted-field.md)).
 - **Start date** — the first date (`YYYY-MM-DD`) the habit counts from.
 - **Reminder time** — optional `HH:MM` at which the reminder engine may notify.
 

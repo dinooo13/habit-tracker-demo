@@ -49,3 +49,4 @@ pattern. Never edit an accepted ADR to reverse it — add a new one and mark the
 | [0020](0020-production-smoke-tests-with-build-sha-stamping.md) | Production deployment smoke tests with build-SHA stamping | Accepted |
 | [0022](0022-version-keyed-schema-migration-registry.md) | Version-keyed schema-migration registry with a discriminated parse result | Accepted |
 | [0024](0024-revision-guarded-saves-with-cross-tab-merge.md) | Revision-guarded saves with deterministic cross-tab merge | Accepted |
+| [0026](0026-habit-category-additive-defaulted-field.md) | Habit category as an additive defaulted field (no schemaVersion bump) | Accepted |

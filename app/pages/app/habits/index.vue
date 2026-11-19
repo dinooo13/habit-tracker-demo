@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Habit, HabitType } from '~/types/app-data'
+import { categoryFilterOptions, filterByCategory, HABIT_CATEGORY_META } from '~/utils/domain/categories'
 import { isDateInHabitPause } from '~/utils/domain/date'
 import { sortWeekdaysForDisplay, WEEKDAY_LABELS } from '~/utils/domain/weekdays'
 
@@ -16,13 +17,17 @@ function isCurrentlyPaused(habit: Habit): boolean {
   return isDateInHabitPause(habit, clock.todayKey.value)
 }
 
+const { categoryFilter } = useCategoryFilter()
 const showArchived = ref(false)
 const page = ref(1)
 const itemsPerPage = 6
 
+const visibleHabits = computed(() =>
+  habitsStore.habits.filter(habit => (showArchived.value ? true : !habit.archived)),
+)
+
 const filteredHabits = computed(() =>
-  habitsStore.habits
-    .filter(habit => (showArchived.value ? true : !habit.archived))
+  filterByCategory(visibleHabits.value, categoryFilter.value)
     .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt)),
 )
 
@@ -52,6 +57,10 @@ const habitTypeMeta: Record<HabitType, { label: string, color: 'primary' | 'warn
     badgeVariant: 'soft',
   },
 }
+
+watch([categoryFilter, showArchived], () => {
+  page.value = 1
+})
 
 watch(total, (value) => {
   const maxPage = Math.max(1, Math.ceil(value / itemsPerPage))
@@ -105,11 +114,21 @@ function typeMeta(type: HabitType): { label: string, color: 'primary' | 'warning
         </template>
 
         <div class="space-y-2">
-          <UCheckbox
-            v-model="showArchived"
-            label="Show archived habits"
-            color="neutral"
-          />
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <UCheckbox
+              v-model="showArchived"
+              label="Show archived habits"
+              color="neutral"
+            />
+            <USelect
+              v-model="categoryFilter"
+              :items="categoryFilterOptions"
+              value-key="value"
+              aria-label="Filter by category"
+              data-testid="habit-category-filter"
+              class="w-48"
+            />
+          </div>
         </div>
       </UCard>
 
@@ -121,7 +140,15 @@ function typeMeta(type: HabitType): { label: string, color: 'primary' | 'warning
       </p>
 
       <UEmpty
-        v-if="!total"
+        v-if="!total && habitsStore.habits.length && categoryFilter !== 'all'"
+        icon="i-lucide-list-filter"
+        :title="`No habits in ${HABIT_CATEGORY_META[categoryFilter].label}`"
+        description="Try another category or show all habits."
+        :actions="[{ label: 'Show all categories', icon: 'i-lucide-x', onClick: () => { categoryFilter = 'all' } }]"
+      />
+
+      <UEmpty
+        v-else-if="!total"
         icon="i-lucide-list-checks"
         title="No habits yet"
         description="Create your first habit and start collecting identity votes."
@@ -166,6 +193,14 @@ function typeMeta(type: HabitType): { label: string, color: 'primary' | 'warning
 
           <div class="space-y-3">
             <div class="flex flex-wrap gap-2">
+              <UBadge
+                color="neutral"
+                variant="outline"
+                :icon="HABIT_CATEGORY_META[habit.category].icon"
+                data-testid="habit-category-badge"
+              >
+                {{ HABIT_CATEGORY_META[habit.category].label }}
+              </UBadge>
               <UBadge
                 color="neutral"
                 variant="outline"

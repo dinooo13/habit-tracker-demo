@@ -150,7 +150,9 @@ the backup nudge, and the reminder engine — reads the reactive `todayKey` rath
 
 The persisted envelope is **`AppDataV2`** (`{ schemaVersion: 2, habits, entries, suggestions,
 settings }`). Each `Habit` carries a `pauses: HabitPause[]` list of inclusive `YYYY-MM-DD`
-ranges; days inside a pause are never *due*. Validation and migration go through
+ranges; days inside a pause are never *due*. Each `Habit` also has an additive, defaulted
+`category` (`health | learning | work | other`, default `other`, no version bump — see
+[adr/0026](adr/0026-habit-category-additive-defaulted-field.md)). Validation and migration go through
 `parseAppDataResult`, which returns a discriminated `ok | migrated | unrecoverable`: a stored V1
 payload or legacy `localStorage` is upgraded by a version-keyed migration registry (the `v1->v2`
 step runs `migrateToV2`), an unrecognised or corrupt payload is `unrecoverable` with an

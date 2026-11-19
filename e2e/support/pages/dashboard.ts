@@ -55,6 +55,11 @@ export class DashboardPage {
     return this.page.getByRole('button', { name: /^Pick a date/ })
   }
 
+  async filterCategory(label: 'All categories' | 'Health' | 'Learning' | 'Work' | 'Other'): Promise<void> {
+    await this.page.getByTestId('today-category-filter').click()
+    await this.page.getByRole('option', { name: label }).click()
+  }
+
   progressText(): Locator {
     return this.page.getByText(/of \d+ reviewed/)
   }

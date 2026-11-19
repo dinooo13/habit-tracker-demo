@@ -14,6 +14,7 @@ function buildHabit(): Habit {
     startDate: '2026-02-08',
     archived: false,
     pauses: [],
+    category: 'other',
     createdAt: '2026-02-08T00:00:00.000Z',
     updatedAt: '2026-02-08T00:00:00.000Z',
   }

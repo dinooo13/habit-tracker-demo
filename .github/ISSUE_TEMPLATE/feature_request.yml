@@ -1,0 +1,52 @@
+name: Feature oder Verbesserung
+description: Eine neue Fähigkeit oder eine Verbesserung vorschlagen. Ohne Akzeptanzkriterien ist ein Ticket nicht bereit für /spec.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Definition of Ready:** Ein Ticket ist bereit für `/spec`, wenn das Problem klar ist
+        und die Akzeptanzkriterien prüfbar sind. Die Akzeptanzkriterien sind der Startpunkt
+        der Spec und später die Grundlage für `/verify`.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Was fehlt oder stört, und für wen? Wo hilfreich mit konkreten Dateien, z. B. `app/stores/entries.ts`.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Akzeptanzkriterien
+      description: |
+        Beobachtbares Verhalten, das ein Mensch oder ein Test prüfen kann. Als Checkliste oder als Given/When/Then.
+        Denkt an die schweren Fälle: leere Listen, aktive Filter, Neuladen, alte Daten und alte Backups, mobile Breite.
+      placeholder: |
+        - [ ] Beim Anlegen eines Habits lässt sich eine Kategorie wählen; die Wahl überlebt Neuladen.
+        - [ ] Given ein aktiver Filter ohne offene Habits, When ich den Open-Tab öffne, Then nennt die Ansicht die Kategorie und bietet "Show all categories" an.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Lösungsidee
+      description: Optional. Was sich grob ändern soll. Vorhandene Utilities und Muster wiederverwenden.
+
+  - type: textarea
+    id: trade-offs
+    attributes:
+      label: Trade-offs
+      description: Optional. Schema-Änderungen, Migrationen, betroffene Bereiche, Risiken.
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: Aufwand
+      options:
+        - Klein
+        - Mittel
+        - Groß

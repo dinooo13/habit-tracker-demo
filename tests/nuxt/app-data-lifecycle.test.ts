@@ -23,6 +23,7 @@ function buildHabit(overrides: Partial<Habit> = {}): Habit {
     startDate: '2026-01-01',
     archived: false,
     pauses: [],
+    category: 'other',
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
     ...overrides,

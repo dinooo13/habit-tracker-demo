@@ -1,4 +1,4 @@
-import type { AppData, CoachingSuggestion, Habit, HabitEntry, HabitType, MissReasonCode } from '~/types/app-data'
+import type { AppData, CoachingSuggestion, Habit, HabitCategory, HabitEntry, HabitType, MissReasonCode } from '~/types/app-data'
 import { APP_DATA_SCHEMA_VERSION, DEFAULT_SETTINGS } from '~/types/app-data'
 import { generateSuggestionsForMissedEntry } from '~/utils/domain/atomic-rules'
 
@@ -45,6 +45,7 @@ interface HabitDef {
   id: string
   name: string
   type: HabitType
+  category: HabitCategory
   identityStatement: string
   scheduleWeekdays: number[] // 0 = Sun … 6 = Sat (JS getDay convention)
   reminderTime: string // HH:MM
@@ -57,6 +58,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_reading',
     name: 'Read 20 pages',
     type: 'build',
+    category: 'learning',
     identityStatement: 'I am a daily learner.',
     scheduleWeekdays: [0, 1, 2, 3, 4, 5, 6],
     reminderTime: '21:00',
@@ -67,6 +69,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_morning_run',
     name: 'Morning run',
     type: 'build',
+    category: 'health',
     identityStatement: 'I am an active person.',
     scheduleWeekdays: [1, 3, 5], // Mon Wed Fri
     reminderTime: '07:00',
@@ -77,6 +80,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_no_snacks',
     name: 'No late-night snacks',
     type: 'break',
+    category: 'health',
     identityStatement: 'I protect my energy and sleep.',
     scheduleWeekdays: [0, 1, 2, 3, 4, 5, 6],
     reminderTime: '20:30',
@@ -87,6 +91,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_social_media_limit',
     name: 'No social media before 18:00',
     type: 'break',
+    category: 'work',
     identityStatement: 'I control my attention.',
     scheduleWeekdays: [1, 2, 3, 4, 5], // Mon–Fri
     reminderTime: '18:00',
@@ -97,6 +102,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_meditation',
     name: '10-minute meditation',
     type: 'build',
+    category: 'health',
     identityStatement: 'I am calm and focused.',
     scheduleWeekdays: [1, 2, 3, 4, 5],
     reminderTime: '08:30',
@@ -107,6 +113,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_water_intake',
     name: 'Drink 8 glasses of water',
     type: 'build',
+    category: 'health',
     identityStatement: 'I am well-hydrated and energised.',
     scheduleWeekdays: [0, 1, 2, 3, 4, 5, 6],
     reminderTime: '12:00',
@@ -117,6 +124,7 @@ const HABIT_DEFS: HabitDef[] = [
     id: 'habit_journaling',
     name: 'Evening journal',
     type: 'build',
+    category: 'learning',
     identityStatement: 'I am self-aware and reflective.',
     scheduleWeekdays: [0, 1, 2, 3, 4, 5, 6],
     reminderTime: '22:00',
@@ -264,6 +272,7 @@ export function generateDemoData(today = new Date()): AppData {
       reminderTime: def.reminderTime,
       startDate: dateToKey(habitStart),
       archived: false,
+      category: def.category,
       pauses: pausesByHabit[def.id] ?? [],
       createdAt: dateToIso(shiftDays(habitStart, -2), timeStr),
       updatedAt: dateToIso(endDate, timeStr),

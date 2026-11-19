@@ -10,6 +10,8 @@ Project documentation for the Atomic Habit Tracker.
 | [glossary.md](glossary.md) | Domain vocabulary (Atomic Habits terms used throughout the code). |
 | [TESTING.md](TESTING.md) | Testing stack, coverage, and conventions. |
 | [e2e-testing.md](e2e-testing.md) | End-to-end (Playwright) suite: commands, layout, and coverage. |
+| [DSGVO.md](DSGVO.md) | Repository-specific privacy review checklist and evidence sources. |
+| [DSGVO-PRUEFBERICHT.md](DSGVO-PRUEFBERICHT.md) | Privacy review findings and open operator questions. |
 | [adr/](adr/) | Architecture Decision Records — the *why* behind the significant choices. |
 
 ## See also
