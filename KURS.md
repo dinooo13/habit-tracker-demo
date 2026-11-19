@@ -42,9 +42,22 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 - Der eingebaute Fehler: `git diff origin/stufe/08-verify-browser origin/kurs/verify-rot -- app/`
 - Der Bericht: `git show origin/kurs/verify-rot:specs/kategorien.verification.md`
 
+## Musterlösung Übung 4: `seminar/ue4-code-parallel`
+
+Baut auf `stufe/03-code` auf und ändert nur den `code`-Skill. Die Spec bleibt, wie sie
+ist: Der Skill entscheidet selbst, welche Tasks unabhängig sind (kein Ergebnis eines
+anderen Tasks nötig, keine gemeinsamen Dateien), und lässt sie parallel in Subagenten laufen, jeder Subagent
+arbeitet TDD (erst rot, dann grün) und committet nicht. Der Hauptagent prüft jedes Ergebnis
+und committet Task für Task selbst. Die Gates laufen am Ende einmal über alles. Bei
+Konflikten oder unklaren Abhängigkeiten wird nacheinander gearbeitet.
+
+- Der Diff: `git diff origin/stufe/03-code origin/seminar/ue4-code-parallel -- .claude/skills/code/`
+
 ## Musterlösung Übung 5: `seminar/ue5-fix-list`
 
-Baut auf `stufe/06-verify-spec-abgleich` auf und gibt `verify` und `code` einen
+Baut auf `stufe/06-verify-spec-abgleich` auf, Ü4 (`seminar/ue4-code-parallel`) ist
+hineingemergt. Die Musterlösungen Ü4 bis Ü7 bilden so eine Kette, jede enthält die
+vorherige. Ü5 gibt `verify` und `code` einen
 gemeinsamen Rückweg. `/verify` schreibt am Ende des Berichts `## Fix list` mit
 Checkboxen, jeder Eintrag mit Quelle: `- [ ] F1 (AC3 not met) …`, `- [ ] F2 (Gate) …`.
 Hinein kommen offene Kriterien und rote Gates, ab Ü6 auch blockierende Review-Befunde
@@ -53,7 +66,7 @@ Test, dann der Fix, ein Commit `fix: … (F2)`, ein Haken. Danach wieder `/verif
 höchstens zwei Runden entscheidet der Mensch. Menschliche Befunde, etwa aus dem
 MR-Review, hängt ihr als Zeile an: `- [ ] F5 (Review human) …`.
 
-- Der Diff: `git diff origin/stufe/06-verify-spec-abgleich origin/seminar/ue5-fix-list`
+- Der Diff (Ü4 und Ü5): `git diff origin/stufe/06-verify-spec-abgleich origin/seminar/ue5-fix-list`
 
 ## Weitere Branches
 
