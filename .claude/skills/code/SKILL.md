@@ -20,6 +20,12 @@ Implement the approved spec: **$ARGUMENTS**
   accepted ADR. If the spec asks for a new ADR, write it as part of the tasks:
   next free number in `docs/adr/`, and add it to `docs/adr/README.md`.
 
+**Fix list.** If `specs/<slug>.verification.md` says `Verdict: Issues found` and its
+`## Fix list` has open items, work only those, in order: a test that shows the
+problem (red), then the fix (green), one commit per item (`fix: <what> (F2)`) and
+tick it (`- [x]`). The spec stays the measure, no new scope. Then suggest `/verify`
+again. After two fix rounds, stop and let the human decide.
+
 ## 2. Prepare the branch
 
 - Never work on `main`. If you are on `main`, create a branch first, for example

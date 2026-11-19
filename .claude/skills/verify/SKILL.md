@@ -10,7 +10,7 @@ disable-model-invocation: true
 Verify the implementation of: **$ARGUMENTS**
 
 You check, you do not build. Do not fix anything in this skill. Findings go to the
-report, and fixes go back to `/code`.
+report, and fixes go back to `/code` through the fix list.
 
 ## Load
 
@@ -62,7 +62,16 @@ Branch: <branch> @ <sha>  ·  Verdict: Pass | Issues found
 
 ## Not verified
 What you could not check, and why.
+
+## Fix list
+- [ ] F1 (AC3 not met) <what is missing>
+- [ ] F2 (Gate) `npm run typecheck` red: <first error>
 ```
+
+The fix list holds every criterion that is `not met` or `partly met`, every red gate
+and every blocking finding, each with its source in brackets. Non-blocking findings
+stay in the report only. If nothing is open, write `none`. A human adds findings the
+same way, e.g. `- [ ] F5 (Review human) <comment>`.
 
 The verdict is **Pass** only when
 - every gate is green,

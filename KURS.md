@@ -42,6 +42,19 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 - Der eingebaute Fehler: `git diff origin/stufe/08-verify-browser origin/kurs/verify-rot -- app/`
 - Der Bericht: `git show origin/kurs/verify-rot:specs/kategorien.verification.md`
 
+## Musterlösung Übung 5: `seminar/ue5-fix-list`
+
+Baut auf `stufe/06-verify-spec-abgleich` auf und gibt `verify` und `code` einen
+gemeinsamen Rückweg. `/verify` schreibt am Ende des Berichts `## Fix list` mit
+Checkboxen, jeder Eintrag mit Quelle: `- [ ] F1 (AC3 not met) …`, `- [ ] F2 (Gate) …`.
+Hinein kommen offene Kriterien und rote Gates, ab Ü6 auch blockierende Review-Befunde
+und Browser-Fehler. `/code` arbeitet eine offene Fix-Liste ab: pro Punkt erst ein roter
+Test, dann der Fix, ein Commit `fix: … (F2)`, ein Haken. Danach wieder `/verify`, nach
+höchstens zwei Runden entscheidet der Mensch. Menschliche Befunde, etwa aus dem
+MR-Review, hängt ihr als Zeile an: `- [ ] F5 (Review human) …`.
+
+- Der Diff: `git diff origin/stufe/06-verify-spec-abgleich origin/seminar/ue5-fix-list`
+
 ## Weitere Branches
 
 Neben der Stufen-Kette gibt es weitere Branches im Repo. Ihr braucht sie für die Hausaufgabe nicht.
