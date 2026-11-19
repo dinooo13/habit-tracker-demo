@@ -2,7 +2,6 @@
 name: code
 description: Implement an approved specification from specs/ task by task, test first, with small Conventional Commits. Lint, typecheck and tests must be green at the end.
 argument-hint: "[specs/<slug>.md]"
-disable-model-invocation: true
 ---
 
 # Code

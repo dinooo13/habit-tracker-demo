@@ -2,7 +2,6 @@
 name: verify
 description: Verify an implementation against its spec. Checks every acceptance criterion, runs the gates, gets a review from a fresh reviewer subagent, walks the criteria in a real browser with playwright-cli and writes a verification report.
 argument-hint: "[specs/<slug>.md]"
-disable-model-invocation: true
 ---
 
 # Verify

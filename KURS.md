@@ -59,6 +59,22 @@ passenderes `allow`.
   Er wird geblockt. `.env` ist gitignored.
 - Der Diff: `git diff origin/stufe/08-verify-browser origin/seminar/ue7-stop-hook-permissions`
 
+## Bonus Übung 7: `seminar/ue7-quick-skill`
+
+Baut auf `seminar/ue7-stop-hook-permissions` auf und ergänzt den Skill `quick`
+(`/quick <Aufgabe oder Ticket>`). Er führt in der Hauptsession ein kurzes Interview,
+ruft `/spec` für eine kurze Spec auf und **stoppt, bis ein Mensch freigibt**
+(`Status: approved  ·  Approved-by: <Name>, <Datum>`, Commit `docs(spec): approve <slug>`).
+Danach startet er je einen frischen Subagenten für `/code specs/<slug>.md` und für
+`/verify specs/<slug>.md` und fasst das Gesamturteil zusammen. Damit `quick` die
+Skills aufrufen kann, fehlt in `code` und `verify` jetzt `disable-model-invocation: true`.
+Der Preis: Der Agent kann diese Skills auch von sich aus starten.
+
+Ehrlich dazu: ein ungetesteter Bonus, ein echter Lauf mit `/quick` steht noch aus.
+
+- Der Skill: `git show origin/seminar/ue7-quick-skill:.claude/skills/quick/SKILL.md`
+- Der Diff: `git diff origin/seminar/ue7-stop-hook-permissions origin/seminar/ue7-quick-skill`
+
 ## Weitere Branches
 
 Neben der Stufen-Kette gibt es weitere Branches im Repo. Ihr braucht sie für die Hausaufgabe nicht.
