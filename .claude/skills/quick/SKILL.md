@@ -2,7 +2,7 @@
 name: quick
 description: Run the whole flow for a small task or ticket in one session. Short
   interview, short spec via /spec, stop for human approval, then /code and /verify
-  each in a fresh subagent. Use when the user types /quick.
+  each in a fresh subagent, with at most two fix rounds. Use when the user types /quick.
 argument-hint: "[issue-number | task description]"
 disable-model-invocation: true
 ---
@@ -36,6 +36,13 @@ You orchestrate. You write no production code yourself.
 - Start another new subagent with only:
   `Run /verify specs/<slug>.md and report the verdict and the report path.`
 
-## 6. Report
+## 6. Fix loop
+- If the verdict is **Issues found**, start a new subagent with only:
+  `Run /code specs/<slug>.md and work the open fix list in specs/<slug>.verification.md.`
+- Then run step 5 again with a new subagent.
+- At most two fix rounds. If issues are still open after that, stop and let the
+  human decide.
+
+## 7. Report
 - Overall verdict (Pass or Issues found), branch, commits, report path,
-  open findings. Do not push, open a PR or merge.
+  fix rounds used, open fix list items. Do not push, open a PR or merge.

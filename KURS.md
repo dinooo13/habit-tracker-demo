@@ -104,7 +104,9 @@ Baut auf `seminar/ue7-stop-hook-permissions` auf und ergänzt den Skill `quick`
 ruft `/spec` für eine kurze Spec auf und **stoppt, bis ein Mensch freigibt**
 (`Status: approved  ·  Approved-by: <Name>, <Datum>`, Commit `docs(spec): approve <slug>`).
 Danach startet er je einen frischen Subagenten für `/code specs/<slug>.md` und für
-`/verify specs/<slug>.md` und fasst das Gesamturteil zusammen. Damit `quick` die
+`/verify specs/<slug>.md`. Bei „Issues found“ folgt die Fix-Schleife: ein frischer
+Subagent für `/code` mit der Fix-Liste, dann wieder `/verify`, höchstens zwei Runden,
+danach entscheidet der Mensch. Am Ende fasst `quick` das Gesamturteil zusammen. Damit `quick` die
 Skills aufrufen kann, fehlt in `code` und `verify` jetzt `disable-model-invocation: true`.
 Der Preis: Der Agent kann diese Skills auch von sich aus starten.
 
