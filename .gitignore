@@ -28,3 +28,6 @@ test-results
 .env
 .env.*
 !.env.example
+
+# playwright-cli snapshots and logs
+.playwright-cli
