@@ -42,6 +42,23 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 - Der eingebaute Fehler: `git diff origin/stufe/08-verify-browser origin/kurs/verify-rot -- app/`
 - Der Bericht: `git show origin/kurs/verify-rot:specs/kategorien.verification.md`
 
+## Musterlösung Übung 7: `seminar/ue7-stop-hook-permissions`
+
+Baut auf `stufe/08-verify-browser` auf (Reviewer und Browser-Check) und ergänzt zwei
+Dinge in `.claude/settings.json`. Erstens den Stop-Hook `gates-on-stop` aus
+`stufe/09-verify-hook`, ohne `schema-guard` und ohne den Skill `schema-change`: Am
+Turn-Ende laufen `npm run lint` und `npm test`, bei Rot arbeitet der Agent weiter.
+Zweitens Permissions als Beispiel für die Reihenfolge `deny` vor `ask` vor `allow`:
+`deny` sperrt `.env` und Force-Pushes, `ask` fragt bei jedem `git push` nach, `allow`
+gibt die Testbefehle frei. Eine Regel aus `deny` gewinnt immer, auch gegen ein
+passenderes `allow`.
+
+- Hook direkt prüfen: `echo '{"stop_hook_active":false}' | .claude/hooks/gates-on-stop.sh`
+  (grün: keine Ausgabe; rot: JSON mit `"decision": "block"`)
+- `.env`-Sperre prüfen: `cp .env.example .env`, dann den Agenten bitten, `.env` zu lesen.
+  Er wird geblockt. `.env` ist gitignored.
+- Der Diff: `git diff origin/stufe/08-verify-browser origin/seminar/ue7-stop-hook-permissions`
+
 ## Weitere Branches
 
 Neben der Stufen-Kette gibt es weitere Branches im Repo. Ihr braucht sie für die Hausaufgabe nicht.

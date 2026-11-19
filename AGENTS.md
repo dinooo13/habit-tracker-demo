@@ -8,6 +8,7 @@ UI texts are English. Use Node 22 (`.nvmrc`).
 npm run lint && npm run typecheck && npm test        # ~20 s
 PORT=3110 E2E_PORT=3110 npm run test:e2e             # ~45 s, builds and serves the app
 ```
+Stop hook `gates-on-stop` runs lint and unit tests at the end of a turn with changes; red blocks.
 Dev server: `PORT=3110 npm run dev`. Unit tests in `tests/` (Node), rendered components in
 `tests/nuxt/`, user flows in `e2e/specs/` with the builders from `e2e/support/data.ts`.
 
