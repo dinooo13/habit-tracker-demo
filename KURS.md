@@ -42,9 +42,47 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 - Der eingebaute Fehler: `git diff origin/stufe/08-verify-browser origin/kurs/verify-rot -- app/`
 - Der Bericht: `git show origin/kurs/verify-rot:specs/kategorien.verification.md`
 
+## Musterlösung Übung 4: `seminar/ue4-code-parallel`
+
+Baut auf `stufe/03-code` auf und ändert nur den `code`-Skill. Die Spec bleibt, wie sie
+ist: Der Skill entscheidet selbst, welche Tasks unabhängig sind (kein Ergebnis eines
+anderen Tasks nötig, keine gemeinsamen Dateien), und lässt sie parallel in Subagenten laufen, jeder Subagent
+arbeitet TDD (erst rot, dann grün) und committet nicht. Der Hauptagent prüft jedes Ergebnis
+und committet Task für Task selbst. Die Gates laufen am Ende einmal über alles. Bei
+Konflikten oder unklaren Abhängigkeiten wird nacheinander gearbeitet.
+
+- Der Diff: `git diff origin/stufe/03-code origin/seminar/ue4-code-parallel -- .claude/skills/code/`
+
+## Musterlösung Übung 5: `seminar/ue5-fix-list`
+
+Baut auf `stufe/06-verify-spec-abgleich` auf, Ü4 (`seminar/ue4-code-parallel`) ist
+hineingemergt. Die Musterlösungen Ü4 bis Ü7 bilden so eine Kette, jede enthält die
+vorherige. Ü5 gibt `verify` und `code` einen
+gemeinsamen Rückweg. `/verify` schreibt am Ende des Berichts `## Fix list` mit
+Checkboxen, jeder Eintrag mit Quelle: `- [ ] F1 (AC3 not met) …`, `- [ ] F2 (Gate) …`.
+Hinein kommen offene Kriterien und rote Gates, ab Ü6 auch blockierende Review-Befunde
+und Browser-Fehler. `/code` arbeitet eine offene Fix-Liste ab: pro Punkt erst ein roter
+Test, dann der Fix, ein Commit `fix: … (F2)`, ein Haken. Danach wieder `/verify`, nach
+höchstens zwei Runden entscheidet der Mensch. Menschliche Befunde, etwa aus dem
+MR-Review, hängt ihr als Zeile an: `- [ ] F5 (Review human) …`.
+
+- Der Diff (Ü4 und Ü5): `git diff origin/stufe/06-verify-spec-abgleich origin/seminar/ue5-fix-list`
+
+## Musterlösung Übung 6: `seminar/ue6-review-browser`
+
+Baut auf `seminar/ue5-fix-list` auf, `stufe/08-verify-browser` ist hineingemergt. Damit
+kommen `stufe/07` und `stufe/08` dazu: der frische Subagent `reviewer` und der
+Browser-Check mit `playwright-cli`. Der Bericht behält die Fix-Liste. Blockierende
+Review-Befunde landen dort als `- [ ] F3 (Review) …`, Fehler aus dem Browser-Check als
+`- [ ] F4 (Browser AC2) …`. Nicht blockierende Befunde bleiben nur im Bericht.
+
+- Der Diff (Ü6): `git diff origin/seminar/ue5-fix-list origin/seminar/ue6-review-browser -- .claude/`
+- Nur der Reviewer: `git diff origin/stufe/06-verify-spec-abgleich origin/stufe/07-verify-review -- .claude/`
+
 ## Musterlösung Übung 7: `seminar/ue7-stop-hook-permissions`
 
-Baut auf `stufe/08-verify-browser` auf (Reviewer und Browser-Check) und ergänzt zwei
+Baut auf `seminar/ue6-review-browser` auf (Ü4 bis Ü6, Reviewer und Browser-Check) und
+ergänzt zwei
 Dinge in `.claude/settings.json`. Erstens den Stop-Hook `gates-on-stop` aus
 `stufe/09-verify-hook`, ohne `schema-guard` und ohne den Skill `schema-change`: Am
 Turn-Ende laufen `npm run lint` und `npm test`, bei Rot arbeitet der Agent weiter.
@@ -57,7 +95,7 @@ passenderes `allow`.
   (grün: keine Ausgabe; rot: JSON mit `"decision": "block"`)
 - `.env`-Sperre prüfen: `cp .env.example .env`, dann den Agenten bitten, `.env` zu lesen.
   Er wird geblockt. `.env` ist gitignored.
-- Der Diff: `git diff origin/stufe/08-verify-browser origin/seminar/ue7-stop-hook-permissions`
+- Der Diff (Ü7): `git diff origin/seminar/ue6-review-browser origin/seminar/ue7-stop-hook-permissions`
 
 ## Bonus Übung 7: `seminar/ue7-quick-skill`
 
