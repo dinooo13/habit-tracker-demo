@@ -44,14 +44,14 @@ due today has already been reviewed“, obwohl Habits anderer Kategorien offen s
 
 ## Musterlösung Übung 4: `seminar/ue4-code-parallel`
 
-Baut auf `stufe/03-code` auf und ändert nur die Skills. Im `spec`-Skill bekommt jeder
-Task eine Abhängigkeitsangabe, z. B. `3. (depends on 1) …`. Der `code`-Skill lässt
-unabhängige Tasks ohne gemeinsame Dateien parallel in Subagenten laufen, jeder Subagent
+Baut auf `stufe/03-code` auf und ändert nur den `code`-Skill. Die Spec bleibt, wie sie
+ist: Der Skill entscheidet selbst, welche Tasks unabhängig sind (kein Ergebnis eines
+anderen Tasks nötig, keine gemeinsamen Dateien), und lässt sie parallel in Subagenten laufen, jeder Subagent
 arbeitet TDD (erst rot, dann grün) und committet nicht. Der Hauptagent prüft jedes Ergebnis
 und committet Task für Task selbst. Die Gates laufen am Ende einmal über alles. Bei
 Konflikten oder unklaren Abhängigkeiten wird nacheinander gearbeitet.
 
-- Der Diff: `git diff origin/stufe/03-code origin/seminar/ue4-code-parallel -- .claude/skills/`
+- Der Diff: `git diff origin/stufe/03-code origin/seminar/ue4-code-parallel -- .claude/skills/code/`
 
 ## Weitere Branches
 

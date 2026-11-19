@@ -74,8 +74,6 @@ What we explicitly do not change.
 ## Tasks
 1. Small, ordered, each testable on its own (test first, then code).
    Name the files each task touches.
-2. (depends on 1) Mark every dependency like this. A task without a marker
-   depends on nothing and may run in parallel.
 
 ## Acceptance criteria
 - [ ] AC1: observable behavior a user or a test can check.
@@ -89,7 +87,6 @@ Browser walk: the exact clicks for each user-facing AC, including a reload.
 Rules for the content:
 
 - Every acceptance criterion is testable and appears in the verification plan.
-- Every task that needs another task first says `(depends on <n>)`.
 - Cover the hard states: empty lists, active filters, reload, old data and old
   backups, mobile width.
 - Data changes say whether `schemaVersion` changes and how old data migrates.
