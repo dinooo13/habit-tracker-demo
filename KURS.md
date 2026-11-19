@@ -68,6 +68,17 @@ MR-Review, hängt ihr als Zeile an: `- [ ] F5 (Review human) …`.
 
 - Der Diff (Ü4 und Ü5): `git diff origin/stufe/06-verify-spec-abgleich origin/seminar/ue5-fix-list`
 
+## Musterlösung Übung 6: `seminar/ue6-review-browser`
+
+Baut auf `seminar/ue5-fix-list` auf, `stufe/08-verify-browser` ist hineingemergt. Damit
+kommen `stufe/07` und `stufe/08` dazu: der frische Subagent `reviewer` und der
+Browser-Check mit `playwright-cli`. Der Bericht behält die Fix-Liste. Blockierende
+Review-Befunde landen dort als `- [ ] F3 (Review) …`, Fehler aus dem Browser-Check als
+`- [ ] F4 (Browser AC2) …`. Nicht blockierende Befunde bleiben nur im Bericht.
+
+- Der Diff (Ü6): `git diff origin/seminar/ue5-fix-list origin/seminar/ue6-review-browser -- .claude/`
+- Nur der Reviewer: `git diff origin/stufe/06-verify-spec-abgleich origin/stufe/07-verify-review -- .claude/`
+
 ## Weitere Branches
 
 Neben der Stufen-Kette gibt es weitere Branches im Repo. Ihr braucht sie für die Hausaufgabe nicht.

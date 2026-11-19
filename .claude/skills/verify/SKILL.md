@@ -103,10 +103,13 @@ What you could not check, and why.
 ## Fix list
 - [ ] F1 (AC3 not met) <what is missing>
 - [ ] F2 (Gate) `npm run typecheck` red: <first error>
+- [ ] F3 (Review) <blocking finding, file:line>
+- [ ] F4 (Browser AC2) <step and what you saw>
 ```
 
-The fix list holds every criterion that is `not met` or `partly met`, every red gate
-and every blocking finding, each with its source in brackets. Non-blocking findings
+The fix list holds every criterion that is `not met` or `partly met`, every red gate,
+every blocking review finding and every failure in the browser walk, each with its
+source in brackets. Non-blocking findings
 stay in the report only. If nothing is open, write `none`. A human adds findings the
 same way, e.g. `- [ ] F5 (Review human) <comment>`.
 
